@@ -27,7 +27,6 @@ module.exports.connect = function () {
 
         db.once('open', () => {
             User = db.model("users", userSchema);
-            console.log("db connected");
             resolve();
         });
     });
@@ -51,11 +50,11 @@ module.exports.registerUser = function (userData) {
                         if (err.code == 11000) {
                             reject("User Name already taken");
                         } else {
-                            reject("There w uas an error creating theser: " + err);
+                            reject("There was an error creating the user: " + err);
                         }
 
                     } else {
-                        resolve("User " + userData.user + " successfully registered");
+                        resolve("User " + userData.userName + " successfully registered");
                     }
                 });
             })
@@ -67,18 +66,18 @@ module.exports.registerUser = function (userData) {
 module.exports.checkUser = function (userData) {
     return new Promise(function (resolve, reject) {
 
-        User.findOne({ userName: userData.user })
+        User.findOne({ userName: userData.userName })
             .exec()
             .then(user => {
                 bcrypt.compare(userData.password, user.password).then(res => {
                     if (res === true) {
                         resolve(user);
                     } else {
-                        reject("Incorrect password for user " + userData.user);
+                        reject("Incorrect password for user " + userData.userName);
                     }
                 });
             }).catch(err => {
-                reject("Unable to find user " + userData.user);
+                reject("Unable to find user " + userData.userName);
             });
     });
 };

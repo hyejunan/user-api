@@ -10,8 +10,10 @@ const passportJWT = require('passport-jwt');
 const userService = require("./user-service.js");
 const HTTP_PORT = process.env.PORT || 8080;
 
+
 let ExtractJwt = passportJWT.ExtractJwt;
 let JwtStrategy = passportJWT.Strategy;
+
 
 let jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
@@ -37,7 +39,6 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/api/user/register", (req, res) => {
-    console.log("Enter Register");
     userService.registerUser(req.body)
     .then((msg) => {
         res.json({ "message": msg });
